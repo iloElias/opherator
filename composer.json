@@ -1,19 +1,27 @@
 {
-    "name": "ilias/opherator",
-    "description": "Package to handle requests",
-    "type": "library",
-    "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "Ilias\\Opherator\\": "src/"
-        }
-    },
-    "authors": [
-        {
-            "name": "Murilo Elias",
-            "email": "murilo7456@gmail.com"
-        }
-    ],
-    "minimum-stability": "stable",
-    "require": {}
+  "name": "ilias/opherator",
+  "type": "library",
+  "version": "1.0.0",
+  "description": "Package to handle requests",
+  "keywords": [
+    "request",
+    "http"
+  ],
+  "homepage": "https://github.com/iloElias/opherator",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Ilias\\Opherator\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Murilo Elias",
+      "email": "murilo7456@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=8.0.0"
+  },
+  "minimum-stability": "stable"
 }

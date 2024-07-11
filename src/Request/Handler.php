@@ -4,7 +4,6 @@ namespace Ilias\Opherator\Request;
 
 class Handler
 {
-  public static array $params = [];
   public static array $query;
   private static bool $hasBody = false;
   private static array $body;
@@ -17,7 +16,7 @@ class Handler
     self::handleBody();
   }
 
-  public static function getMethod()
+  public static function getMethod(): string
   {
     return self::$method;
   }
