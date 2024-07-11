@@ -1,5 +1,7 @@
 <?php
 
+namespace Ilias\Opherator\Request;
+
 class Response
 {
   private static array $response = [];
