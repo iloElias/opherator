@@ -4,10 +4,10 @@ namespace Ilias\Opherator\Request;
 
 class Request
 {
-  public static array $query;
+  public static array $query = [];
   private static bool $hasBody = false;
-  private static array $body;
-  private static string $method;
+  private static array $body = [];
+  private static string $method = "";
 
   public static function setup()
   {
