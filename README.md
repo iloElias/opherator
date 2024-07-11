@@ -77,9 +77,3 @@ class Response
   public static function answer(): void;
 }
 ```
-
-## Explanations
-
-* `::class`
-
-  Is recommended to use the static reference to your class, so te code does know exactly which class to use
