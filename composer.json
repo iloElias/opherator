@@ -1,0 +1,19 @@
+{
+    "name": "ilias/opherator",
+    "description": "Package to handle requests",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Ilias\\Opherator\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Murilo Elias",
+            "email": "murilo7456@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
