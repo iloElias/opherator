@@ -2,7 +2,7 @@
 
 namespace Ilias\Opherator\Request;
 
-class Handler
+class Request
 {
   public static array $query;
   private static bool $hasBody = false;

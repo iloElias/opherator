@@ -39,9 +39,9 @@ Create a file to define your routes, for example, in your project root folder, `
 ```php
 <?php
 
-use Ilias\Opherator\Request\Handler;
+use Ilias\Opherator\Request\Request;
 
-Handler::setup();
+Request::setup();
 ```
 
 ### Step 2: Use As Your Needs
@@ -49,7 +49,7 @@ Handler::setup();
 The handler provides the next methods:
 
 ```php
-class Handler
+class Request
 {
   public static function getMethod() : string;
 
