@@ -2,6 +2,10 @@
 
 namespace Ilias\Opherator\Request;
 
+use Ilias\Opherator\Exceptions\InvalidRequestException;
+use Ilias\Opherator\Exceptions\InvalidMethodException;
+use Ilias\Opherator\Exceptions\InvalidBodyFormatException;
+
 class Request
 {
   public static array $query = [];
@@ -9,11 +13,16 @@ class Request
   private static array $body = [];
   private static string $method = "";
 
-  public static function setup()
+  public static function setup(array $server = [], array $get = [], string $input = "")
   {
-    self::$method = $_SERVER["REQUEST_METHOD"] ?? "";
-    self::$query = $_GET ?? [];
-    self::handleBody();
+    self::$method = $server["REQUEST_METHOD"] ?? "";
+
+    if (self::$method && !in_array(self::$method, ['GET', 'POST', 'PUT', 'HEAD', 'DELETE', 'PATCH', 'OPTIONS', 'CONNECT', 'TRACE'])) {
+      throw new InvalidMethodException();
+    }
+
+    self::$query = $get ?? [];
+    self::handleBody($input);
   }
 
   public static function getMethod(): string
@@ -36,11 +45,25 @@ class Request
     return self::$hasBody;
   }
 
-  private static function handleBody()
+  private static function handleBody(string $input)
   {
-    if (file_get_contents("php://input")) {
+    if ($input) {
       self::$hasBody = true;
-      self::$body = json_decode(file_get_contents("php://input"), true);
+      $body = json_decode($input, true);
+
+      if (json_last_error() !== JSON_ERROR_NONE) {
+        throw new InvalidBodyFormatException();
+      }
+
+      self::$body = $body ?? [];
     }
+  }
+
+  public static function clear()
+  {
+    self::$method = "";
+    self::$query = [];
+    self::$body = [];
+    self::$hasBody = false;
   }
 }

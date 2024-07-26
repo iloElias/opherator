@@ -2,17 +2,28 @@
 
 namespace Ilias\Opherator\Request;
 
+use Ilias\Opherator\Exceptions\InvalidResponseException;
+
+
 class Response
 {
   private static array $response = [];
 
   public static function setResponse(array $response): void
   {
+    if (empty($response)) {
+      throw new InvalidResponseException('Response cannot be empty');
+    }
+
     self::$response = $response;
   }
 
-  public static function appendResponse(string $key = "data", string|array $response, bool $override = true): void
+  public static function appendResponse(string $key, string|array $response, bool $override = true): void
   {
+    if (empty($response)) {
+      throw new InvalidResponseException('Response cannot be empty');
+    }
+
     if ($override) {
       self::$response[$key] = $response;
       return;
@@ -20,18 +31,23 @@ class Response
     self::$response[$key][] = $response;
   }
 
-  public static function jsonResponse(): void
+  public static function jsonResponse(): string
   {
-    header("Content-Type: application/json; charset=UTF-8", true);
+    return "Content-Type: application/json; charset=UTF-8";
   }
 
-  public static function htmlResponse(): void
+  public static function htmlResponse(): string
   {
-    header("Content-Type: text/html; charset=UTF-8", true);
+    return "Content-Type: text/html; charset=UTF-8";
   }
 
-  public static function answer(): void
+  public static function answer(): string
   {
-    echo json_encode(self::$response);
+    return json_encode(self::$response);
+  }
+
+  public static function clear()
+  {
+    self::$response = [];
   }
 }
