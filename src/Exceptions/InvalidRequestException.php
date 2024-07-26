@@ -2,7 +2,12 @@
 
 namespace Ilias\Opherator\Exceptions;
 
-class InvalidRequestException extends \Exception
+use Exception;
+
+/**
+ * Exception thrown when a request is invalid.
+ */
+class InvalidRequestException extends Exception
 {
   protected $message = 'Invalid request';
 }

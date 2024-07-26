@@ -2,7 +2,12 @@
 
 namespace Ilias\Opherator\Exceptions;
 
-class InvalidMethodException extends \Exception
+use Exception;
+
+/**
+ * Exception thrown when an HTTP method is invalid.
+ */
+class InvalidMethodException extends Exception
 {
   protected $message = 'Invalid HTTP method';
 }

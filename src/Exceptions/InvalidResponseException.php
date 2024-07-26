@@ -2,7 +2,12 @@
 
 namespace Ilias\Opherator\Exceptions;
 
-class InvalidResponseException extends \Exception
+use Exception;
+
+/**
+ * Exception thrown when a response is invalid.
+ */
+class InvalidResponseException extends Exception
 {
   protected $message = 'Invalid response';
 }

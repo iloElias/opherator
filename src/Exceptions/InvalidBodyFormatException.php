@@ -2,7 +2,13 @@
 
 namespace Ilias\Opherator\Exceptions;
 
-class InvalidBodyFormatException extends \Exception
+use Exception;
+
+
+/**
+ * Exception thrown when the request body format is invalid.
+ */
+class InvalidBodyFormatException extends Exception
 {
   protected $message = 'Invalid body format';
 }
