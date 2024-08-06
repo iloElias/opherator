@@ -72,13 +72,39 @@ class Response
   }
 
   /**
-   * Outputs the response data as JSON.
+   * Sets the response content type to JSON.
    *
-   * @return string The JSON encoded response data.
+   * This method sets the "Content-Type" header to "application/json; charset=UTF-8".
+   * It is used to indicate that the response body will be in JSON format.
+   *
+   * @return void
    */
-  public static function answer(): string
+  public static function setJson()
   {
-    return json_encode(self::$response);
+    header("Content-Type: application/json; charset=UTF-8", true);
+  }
+
+  /**
+   * Sets the response content type to HTML.
+   *
+   * This method sets the "Content-Type" header to "text/html; charset=UTF-8".
+   * It is used to indicate that the response body will be in HTML format.
+   *
+   * @return void
+   */
+  public static function setHtml()
+  {
+    header("Content-Type: text/html; charset=UTF-8", true);
+  }
+
+  /**
+   * Sends the response as a JSON-encoded string.
+   *
+   * @return void
+   */
+  public static function answer()
+  {
+    echo json_encode(self::$response);
   }
 
   /**
