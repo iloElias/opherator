@@ -19,14 +19,11 @@ class Request
   /**
    * Sets up the request data from the server and input.
    *
-   * @param array $server The server variables.
-   * @param array $get The GET parameters.
-   * @param string $input The raw input data.
    * @throws InvalidMethodException if the HTTP method is invalid.
    * @throws InvalidBodyFormatException if the request body format is invalid.
    * @return void
    */
-  public static function setup(array $server = [], array $get = [], string $input = ""): void
+  public static function setup(): void
   {
     self::$method = $server["REQUEST_METHOD"] ?? "";
 
@@ -35,7 +32,7 @@ class Request
     }
 
     self::$query = $get ?? [];
-    self::handleBody($input);
+    self::handleBody(file_get_contents("php://input"));
   }
 
   /**
