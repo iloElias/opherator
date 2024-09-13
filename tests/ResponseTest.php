@@ -13,48 +13,84 @@ class ResponseTest extends TestCase
 
   public function testSetResponse()
   {
-    $response = ["key" => "value"];
+    $response = ['key' => 'value'];
     Response::setResponse($response);
-    $this->expectOutputString(json_encode($response));
-    echo Response::answer();
+    $this->assertEquals(json_encode($response), Response::answer(Response::RETURN_RESPONSE));
   }
 
-  public function testSetEmptyResponseThrowsException()
+  public function testSetResponseThrowsExceptionOnEmptyResponse()
   {
     $this->expectException(InvalidResponseException::class);
     Response::setResponse([]);
   }
 
-  public function testAppendResponseOverride()
+  public function testAppendResponse()
   {
-    Response::appendResponse("key", "value");
-    $expected = ["key" => "value"];
-    $this->expectOutputString(json_encode($expected));
-    echo Response::answer();
-  }
-
-  public function testAppendEmptyResponseThrowsException()
-  {
-    $this->expectException(InvalidResponseException::class);
-    Response::appendResponse("key", "");
+    $response = ['key' => 'value'];
+    Response::setResponse($response);
+    Response::appendResponse('key2', 'value2');
+    $expectedResponse = ['key' => 'value', 'key2' => 'value2'];
+    $this->assertEquals($expectedResponse, json_decode(Response::answer(Response::RETURN_RESPONSE), true));
   }
 
   public function testAppendResponseWithoutOverride()
   {
-    Response::appendResponse("key", "value1", false);
-    Response::appendResponse("key", "value2", false);
-    $expected = ["key" => ["value1", "value2"]];
-    $this->expectOutputString(json_encode($expected));
-    echo Response::answer();
+    $response = ['key' => ['value1']];
+    Response::setResponse($response);
+    Response::appendResponse('key', 'value2', false);
+    $expectedResponse = ['key' => ['value1', 'value2']];
+    $this->assertEquals($expectedResponse, json_decode(Response::answer(Response::RETURN_RESPONSE), true));
   }
 
-  public function testJsonResponseHeader()
+  public function testAppendResponseThrowsExceptionOnEmptyResponse()
   {
-    $this->assertEquals("Content-Type: application/json; charset=UTF-8", Response::jsonResponse());
+    $this->expectException(InvalidResponseException::class);
+    Response::appendResponse('key', []);
   }
 
-  public function testHtmlResponseHeader()
+  public function testSetHeader()
   {
-    $this->assertEquals("Content-Type: text/html; charset=UTF-8", Response::htmlResponse());
+    $this->expectOutputString('Content-Type: application/json; charset=UTF-8');
+    Response::setHeader(Response::jsonResponse());
+  }
+
+  public function testJsonResponse()
+  {
+    $this->assertEquals('Content-Type: application/json; charset=UTF-8', Response::jsonResponse());
+  }
+
+  public function testHtmlResponse()
+  {
+    $this->assertEquals('Content-Type: text/html; charset=UTF-8', Response::htmlResponse());
+  }
+
+  public function testAnswerReturnResponse()
+  {
+    $response = ['key' => 'value'];
+    Response::setResponse($response);
+    $this->assertEquals(json_encode($response), Response::answer(Response::RETURN_RESPONSE));
+  }
+
+  public function testClear()
+  {
+    $response = ['key' => 'value'];
+    Response::setResponse($response);
+    Response::clear();
+    $this->assertEquals(json_encode([]), Response::answer(Response::RETURN_RESPONSE));
+  }
+
+  public function testSetMultipleHeaders()
+  {
+    $this->expectOutputString("Header1: value1\nHeader2: value2");
+    Response::setHeader(['Header1: value1', 'Header2: value2']);
+  }
+
+  public function testAppendResponseWithArray()
+  {
+    $response = ['key' => ['value1']];
+    Response::setResponse($response);
+    Response::appendResponse('key', ['value2'], false);
+    $expectedResponse = ['key' => ['value1', ['value2']]];
+    $this->assertEquals($expectedResponse, json_decode(Response::answer(Response::RETURN_RESPONSE), true));
   }
 }
