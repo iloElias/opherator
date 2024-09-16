@@ -8,7 +8,11 @@ class JsonResponse extends \stdClass
 {
   public function __construct(
     public StatusCode $statusCode,
+    array $initialValue = []
   ) {
+    if (!empty($initialValue)) {
+      $this->setArray($initialValue);
+    }
   }
 
   public function __toString()
