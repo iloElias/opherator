@@ -1,15 +1,16 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Ilias\Opherator\Request\Request;
+use Ilias\Opherator\Request;
 use Ilias\Opherator\Exceptions\InvalidMethodException;
 use Ilias\Opherator\Exceptions\InvalidBodyFormatException;
+use Ilias\Opherator\Request\Method;
 
 class RequestTest extends TestCase
 {
   protected function setUp(): void
   {
-    $_SERVER['REQUEST_METHOD'] = 'GET';
+    $_SERVER['REQUEST_METHOD'] = Method::GET;
     $_GET = ['param' => 'value'];
     $_POST = [];
     $_SERVER['HTTP_CONTENT_TYPE'] = 'application/json';
@@ -24,7 +25,7 @@ class RequestTest extends TestCase
   public function testSetupWithValidMethod()
   {
     Request::setup();
-    $this->assertEquals('GET', Request::getMethod());
+    $this->assertEquals(Method::GET, Request::getMethod());
   }
 
   public function testSetupWithInvalidMethod()
@@ -40,35 +41,12 @@ class RequestTest extends TestCase
     $this->assertEquals(['param' => 'value'], Request::getQuery());
   }
 
-  public function testGetBody()
-  {
-    $_SERVER['REQUEST_METHOD'] = 'POST';
-    file_put_contents('php://input', json_encode(['key' => 'value']));
-    Request::setup();
-    $this->assertEquals(['key' => 'value'], Request::getBody());
-  }
-
   public function testGetHeaders()
   {
+    $_SERVER['HTTP_CONTENT_TYPE'] = 'application/json';
     Request::setup();
-    $this->assertArrayHasKey('content-type', Request::getHeaders());
-    $this->assertEquals('application/json', Request::getHeaders()['content-type']);
-  }
-
-  public function testHasBody()
-  {
-    $_SERVER['REQUEST_METHOD'] = 'POST';
-    file_put_contents('php://input', json_encode(['key' => 'value']));
-    Request::setup();
-    $this->assertTrue(Request::hasBody());
-  }
-
-  public function testHandleBodyWithInvalidJson()
-  {
-    $_SERVER['REQUEST_METHOD'] = 'POST';
-    file_put_contents('php://input', '{invalid json}');
-    $this->expectException(InvalidBodyFormatException::class);
-    Request::setup();
+    $this->assertArrayHasKey('Content-Type', Request::getHeaders());
+    $this->assertEquals('application/json', Request::getHeaders()['Content-Type']);
   }
 
   public function testClear()

@@ -1,7 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Ilias\Opherator\Request\Response;
+use Ilias\Opherator\Response;
 use Ilias\Opherator\Exceptions\InvalidResponseException;
 
 class ResponseTest extends TestCase
@@ -50,8 +50,8 @@ class ResponseTest extends TestCase
 
   public function testSetHeader()
   {
-    $this->expectOutputString('Content-Type: application/json; charset=UTF-8');
     Response::setHeader(Response::jsonResponse());
+    $this->assertEquals(['Content-Type: application/json; charset=UTF-8'], Response::getHeaders());
   }
 
   public function testJsonResponse()
@@ -81,8 +81,8 @@ class ResponseTest extends TestCase
 
   public function testSetMultipleHeaders()
   {
-    $this->expectOutputString("Header1: value1\nHeader2: value2");
     Response::setHeader(['Header1: value1', 'Header2: value2']);
+    $this->assertEquals(['Header1: value1', 'Header2: value2'], Response::getHeaders());
   }
 
   public function testAppendResponseWithArray()

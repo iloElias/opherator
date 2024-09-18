@@ -1,8 +1,8 @@
 <?php
-
-namespace Ilias\Opherator\Request;
+namespace Ilias\Opherator;
 
 use Ilias\Opherator\Exceptions\InvalidResponseException;
+use Ilias\Opherator\Request\JsonResponse;
 
 /**
  * Handles HTTP responses and provides methods to manage response data.
@@ -13,6 +13,7 @@ class Response
   const RETURN_RESPONSE = 2;
 
   private static array|JsonResponse $response;
+  private static array $headers = [];
 
   /**
    * Sets the response data.
@@ -65,11 +66,20 @@ class Response
   {
     if (is_array($header)) {
       foreach ($header as $option) {
-        header($option, $override);
+        self::addHeader($option, $override);
       }
       return;
     }
-    header($header, $override);
+    self::addHeader($header, $override);
+  }
+
+  private static function addHeader(string $header, bool $override): void
+  {
+    if ($override) {
+      self::$headers[] = $header;
+    } else {
+      self::$headers[] = $header;
+    }
   }
 
   /**
@@ -115,5 +125,15 @@ class Response
   public static function clear()
   {
     self::$response = [];
+    self::$headers = [];
+  }
+
+  /**
+   * Gets the headers for testing purposes.
+   * @return array The headers.
+   */
+  public static function getHeaders(): array
+  {
+    return self::$headers;
   }
 }

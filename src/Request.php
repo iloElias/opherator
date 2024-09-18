@@ -1,17 +1,17 @@
 <?php
 
-namespace Ilias\Opherator\Request;
+namespace Ilias\Opherator;
 
-use Ilias\Opherator\Exceptions\InvalidRequestException;
 use Ilias\Opherator\Exceptions\InvalidMethodException;
 use Ilias\Opherator\Exceptions\InvalidBodyFormatException;
+use Ilias\Opherator\Request\Method;
 
 /**
  * Handles HTTP requests and provides methods to access request data.
  */
 class Request
 {
-  private static string $method = "";
+  private static string $method = '';
   public static array $query = [];
   private static array $header = [];
   private static array $body = [];
@@ -26,13 +26,9 @@ class Request
    */
   public static function setup(): void
   {
-    self::$method = $server["REQUEST_METHOD"] ?? "";
-
-    if (self::$method && !in_array(self::$method, ['GET', 'POST', 'PUT', 'HEAD', 'DELETE', 'PATCH', 'OPTIONS', 'CONNECT', 'TRACE'])) {
-      throw new InvalidMethodException();
-    }
-
-    self::$query = $get ?? [];
+    $method = new Method($_SERVER["REQUEST_METHOD"]);
+    self::$method = $method->getMethod();
+    self::$query = $_GET ?? [];
     self::handleBody(file_get_contents("php://input"));
     self::handleHeaders();
   }

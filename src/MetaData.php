@@ -1,10 +1,10 @@
 <?php
 
-namespace Ilias\Opherator\Request;
+namespace Ilias\Opherator;
 
 use Ilias\Opherator\Exceptions\InvalidContentTypeException;
 
-class ResponseMetaData
+class MetaData
 {
   const CONTENT_TYPE_JSON = 'json';
   const CONTENT_TYPE_XML = 'xml';
@@ -16,7 +16,8 @@ class ResponseMetaData
   const CONTENT_TYPE_IMAGE = 'image';
   private array $contentTypes;
 
-  public function __construct() {
+  public function __construct()
+  {
     $this->contentTypes = [
       self::CONTENT_TYPE_JSON => 'Content-Type: application/json; charset=UTF-8',
       self::CONTENT_TYPE_XML => 'Content-Type: application/xml; charset=UTF-8',
@@ -29,7 +30,8 @@ class ResponseMetaData
     ];
   }
 
-  public function getContentType(string $contentType = self::CONTENT_TYPE_JSON) {
+  public function getContentType(string $contentType = self::CONTENT_TYPE_JSON)
+  {
     $contentType = $this->contentTypes[$contentType] ?? null;
     if (!empty($contentType)) {
       return $contentType;

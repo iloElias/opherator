@@ -39,7 +39,7 @@ Create a file to define your routes, for example, in your project root folder, `
 ```php
 <?php
 
-use Ilias\Opherator\Request\Request;
+use Ilias\Opherator\\Request;
 
 Request::setup();
 ```
