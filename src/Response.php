@@ -2,7 +2,7 @@
 namespace Ilias\Opherator;
 
 use Ilias\Opherator\Exceptions\InvalidResponseException;
-use Ilias\Opherator\Request\JsonResponse;
+use Ilias\Opherator\JsonResponse;
 
 /**
  * Handles HTTP responses and provides methods to manage response data.

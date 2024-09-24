@@ -1,7 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Ilias\Opherator\Request\JsonResponse;
+use Ilias\Opherator\JsonResponse;
 use Ilias\Opherator\Exceptions\InvalidKeyFormat;
 use Ilias\Opherator\Request\StatusCode;
 
