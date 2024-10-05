@@ -113,6 +113,7 @@ class Response
       case self::PRINT_RESPONSE:
         echo json_encode(self::$response);
       case self::RETURN_RESPONSE:
+        return json_encode(self::$response);
       default:
         return json_encode(self::$response);
     }
