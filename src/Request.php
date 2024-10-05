@@ -1,41 +1,36 @@
 <?php
 
-namespace Ilias\Opherator\Request;
+namespace Ilias\Opherator;
 
-use Ilias\Opherator\Exceptions\InvalidRequestException;
 use Ilias\Opherator\Exceptions\InvalidMethodException;
 use Ilias\Opherator\Exceptions\InvalidBodyFormatException;
+use Ilias\Opherator\Request\Method;
 
 /**
  * Handles HTTP requests and provides methods to access request data.
  */
 class Request
 {
+  private static string $method = '';
   public static array $query = [];
-  private static bool $hasBody = false;
+  private static array $header = [];
   private static array $body = [];
-  private static string $method = "";
+  private static bool $hasBody = false;
 
   /**
    * Sets up the request data from the server and input.
    *
-   * @param array $server The server variables.
-   * @param array $get The GET parameters.
-   * @param string $input The raw input data.
    * @throws InvalidMethodException if the HTTP method is invalid.
    * @throws InvalidBodyFormatException if the request body format is invalid.
    * @return void
    */
-  public static function setup(array $server = [], array $get = [], string $input = ""): void
+  public static function setup(): void
   {
-    self::$method = $server["REQUEST_METHOD"] ?? "";
-
-    if (self::$method && !in_array(self::$method, ['GET', 'POST', 'PUT', 'HEAD', 'DELETE', 'PATCH', 'OPTIONS', 'CONNECT', 'TRACE'])) {
-      throw new InvalidMethodException();
-    }
-
-    self::$query = $get ?? [];
-    self::handleBody($input);
+    $method = new Method($_SERVER["REQUEST_METHOD"]);
+    self::$method = $method->getMethod();
+    self::$query = $_GET ?? [];
+    self::handleBody(file_get_contents("php://input"));
+    self::handleHeaders();
   }
 
   /**
@@ -69,6 +64,17 @@ class Request
   }
 
   /**
+   * Gets a specific header from the request.
+   *
+   * @param string $name The name of the header.
+   * @return string|null The header value or null if not found.
+   */
+  public static function getHeader(string $name): ?string
+  {
+    return self::$header[$name] ?? null;
+  }
+
+  /**
    * Checks if the request has a body.
    *
    * @return bool True if the request has a body, false otherwise.
@@ -76,6 +82,33 @@ class Request
   public static function hasBody(): bool
   {
     return self::$hasBody;
+  }
+
+  /**
+   * Handles the request headers.
+   *
+   * @return void
+   */
+  public static function handleHeaders(): void
+  {
+    foreach ($_SERVER as $key => $value) {
+      if (substr($key, 0, 5) != 'HTTP_') {
+        continue;
+      }
+
+      $header = str_replace(' ', '-', ucwords(str_replace('_', ' ', strtolower(substr($key, 5)))));
+      self::$header[$header] = $value;
+    }
+  }
+
+  /**
+   * Gets the request headers.
+   *
+   * @return array The request headers.
+   */
+  public static function getHeaders(): array
+  {
+    return self::$header;
   }
 
   /**
@@ -108,6 +141,7 @@ class Request
   {
     self::$method = "";
     self::$query = [];
+    self::$header = [];
     self::$body = [];
     self::$hasBody = false;
   }

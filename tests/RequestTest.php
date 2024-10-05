@@ -1,61 +1,61 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Ilias\Opherator\Request\Request;
+use Ilias\Opherator\Request;
 use Ilias\Opherator\Exceptions\InvalidMethodException;
 use Ilias\Opherator\Exceptions\InvalidBodyFormatException;
+use Ilias\Opherator\Request\Method;
 
 class RequestTest extends TestCase
 {
   protected function setUp(): void
   {
+    $_SERVER['REQUEST_METHOD'] = Method::GET;
+    $_GET = ['param' => 'value'];
+    $_POST = [];
+    $_SERVER['HTTP_CONTENT_TYPE'] = 'application/json';
+    file_put_contents('php://input', json_encode(['key' => 'value']));
+  }
+
+  protected function tearDown(): void
+  {
     Request::clear();
   }
 
-  public function testSetupWithGetRequest()
+  public function testSetupWithValidMethod()
   {
-    $server = ["REQUEST_METHOD" => "GET"];
-    $get = ["key" => "value"];
-
-    Request::setup($server, $get);
-    $this->assertEquals("GET", Request::getMethod());
-    $this->assertEquals(["key" => "value"], Request::getQuery());
-  }
-
-  public function testSetupWithPostRequest()
-  {
-    $server = ["REQUEST_METHOD" => "POST"];
-    $input = '{"key": "value"}';
-
-    Request::setup($server, [], $input);
-    $this->assertEquals("POST", Request::getMethod());
-    $this->assertTrue(Request::hasBody());
-    $this->assertEquals(["key" => "value"], Request::getBody());
+    Request::setup();
+    $this->assertEquals(Method::GET, Request::getMethod());
   }
 
   public function testSetupWithInvalidMethod()
   {
+    $_SERVER['REQUEST_METHOD'] = 'INVALID';
     $this->expectException(InvalidMethodException::class);
-
-    $server = ["REQUEST_METHOD" => "INVALID"];
-    Request::setup($server);
+    Request::setup();
   }
 
-  public function testSetupWithInvalidBodyFormat()
-  {
-    $this->expectException(InvalidBodyFormatException::class);
-
-    $server = ["REQUEST_METHOD" => "POST"];
-    $input = '{invalid-json}';
-    Request::setup($server, [], $input);
-  }
-
-  public function testSetupWithEmptyRequest()
+  public function testGetQuery()
   {
     Request::setup();
-    $this->assertEquals("", Request::getMethod());
+    $this->assertEquals(['param' => 'value'], Request::getQuery());
+  }
+
+  public function testGetHeaders()
+  {
+    $_SERVER['HTTP_CONTENT_TYPE'] = 'application/json';
+    Request::setup();
+    $this->assertArrayHasKey('Content-Type', Request::getHeaders());
+    $this->assertEquals('application/json', Request::getHeaders()['Content-Type']);
+  }
+
+  public function testClear()
+  {
+    Request::setup();
+    Request::clear();
+    $this->assertEquals('', Request::getMethod());
     $this->assertEmpty(Request::getQuery());
-    $this->assertFalse(Request::hasBody());
     $this->assertEmpty(Request::getBody());
+    $this->assertFalse(Request::hasBody());
   }
 }

@@ -9,5 +9,5 @@ use Exception;
  */
 class InvalidMethodException extends Exception
 {
-  protected $message = 'Invalid HTTP method';
+  protected $message = 'Invalid HTTP request method';
 }

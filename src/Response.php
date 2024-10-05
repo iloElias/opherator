@@ -1,15 +1,19 @@
 <?php
-
-namespace Ilias\Opherator\Request;
+namespace Ilias\Opherator;
 
 use Ilias\Opherator\Exceptions\InvalidResponseException;
+use Ilias\Opherator\JsonResponse;
 
 /**
  * Handles HTTP responses and provides methods to manage response data.
  */
 class Response
 {
-  private static array $response = [];
+  const PRINT_RESPONSE = 1;
+  const RETURN_RESPONSE = 2;
+
+  private static array|JsonResponse $response;
+  private static array $headers = [];
 
   /**
    * Sets the response data.
@@ -19,7 +23,7 @@ class Response
    * @throws InvalidResponseException if the response data is empty.
    * @return void
    */
-  public static function setResponse(array $response): void
+  public static function setResponse(array|JsonResponse $response): void
   {
     if (empty($response)) {
       throw new InvalidResponseException('Response cannot be empty');
@@ -52,6 +56,33 @@ class Response
   }
 
   /**
+   * Sets the response headers.
+   *
+   * @param array $headers The headers to set.
+   * @param bool $override Whether to override existing headers. Default is true.
+   * @return void
+   */
+  public static function setHeader(string|array $header, bool $override = true): void
+  {
+    if (is_array($header)) {
+      foreach ($header as $option) {
+        self::addHeader($option, $override);
+      }
+      return;
+    }
+    self::addHeader($header, $override);
+  }
+
+  private static function addHeader(string $header, bool $override): void
+  {
+    if ($override) {
+      self::$headers[] = $header;
+    } else {
+      self::$headers[] = $header;
+    }
+  }
+
+  /**
    * Gets the JSON response header.
    *
    * @return string The JSON response header.
@@ -76,9 +107,15 @@ class Response
    *
    * @return string The JSON encoded response data.
    */
-  public static function answer(): string
+  public static function answer(int $answerType = self::PRINT_RESPONSE): string
   {
-    return json_encode(self::$response);
+    switch ($answerType) {
+      case self::PRINT_RESPONSE:
+        echo json_encode(self::$response);
+      case self::RETURN_RESPONSE:
+      default:
+        return json_encode(self::$response);
+    }
   }
 
   /**
@@ -88,5 +125,15 @@ class Response
   public static function clear()
   {
     self::$response = [];
+    self::$headers = [];
+  }
+
+  /**
+   * Gets the headers for testing purposes.
+   * @return array The headers.
+   */
+  public static function getHeaders(): array
+  {
+    return self::$headers;
   }
 }
