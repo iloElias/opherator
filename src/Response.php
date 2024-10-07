@@ -23,7 +23,10 @@ class Response
    */
   public static function setResponse(array|JsonResponse $response): void
   {
-    if (empty($response) && !Opherator::$suppressResponseExceptions) {
+    if (empty($response)) {
+      if (Opherator::$suppressResponseExceptions) {
+        return;
+      }
       throw new InvalidResponseException('Response cannot be empty');
     }
 
@@ -41,7 +44,10 @@ class Response
    */
   public static function appendResponse(string $key, string|array $response, bool $override = true): void
   {
-    if (empty($response) && !Opherator::$suppressResponseExceptions) {
+    if (empty($response)) {
+      if (Opherator::$suppressResponseExceptions) {
+        return;
+      }
       throw new InvalidResponseException('Response cannot be empty');
     }
 

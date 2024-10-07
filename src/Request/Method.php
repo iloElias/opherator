@@ -33,7 +33,11 @@ class Method
       self::TRACE => self::TRACE,
     ];
     if (!empty($method)) {
-      if (!in_array($method, $this->getRequestMethods()) && !Opherator::$suppressRequestExceptions) {
+      if (!in_array($method, $this->getRequestMethods())) {
+        if (!Opherator::$suppressRequestExceptions) {
+          $this->requestMethod = self::GET;
+          return;
+        }
         throw new InvalidMethodException();
       } else {
         $this->requestMethod = $method;
