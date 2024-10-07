@@ -58,7 +58,7 @@ class Response
   /**
    * Sets the response headers.
    *
-   * @param array $headers The headers to set.
+   * @param array $header The headers to set.
    * @param bool $override Whether to override existing headers. Default is true.
    * @return void
    */
@@ -78,11 +78,11 @@ class Response
     header($header, $override);
     foreach (self::$headers as $key => $value) {
       if ($value === $header && $override) {
-        self::$headers[$key] = $value;
+        self::$headers[$key] = $header;
         return;
       }
     }
-    self::$headers[] = $value;
+    self::$headers[] = $header;
   }
 
   /**
