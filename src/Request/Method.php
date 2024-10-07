@@ -3,6 +3,7 @@
 namespace Ilias\Opherator\Request;
 
 use Ilias\Opherator\Exceptions\InvalidMethodException;
+use Ilias\Opherator\Opherator;
 
 class Method
 {
@@ -32,7 +33,7 @@ class Method
       self::TRACE => self::TRACE,
     ];
     if (!empty($method)) {
-      if (!in_array($method, $this->getRequestMethods())) {
+      if (!in_array($method, $this->getRequestMethods()) && !Opherator::$suppressRequestExceptions) {
         throw new InvalidMethodException();
       } else {
         $this->requestMethod = $method;

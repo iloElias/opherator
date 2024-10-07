@@ -125,7 +125,7 @@ class Request
       self::$hasBody = true;
       $body = json_decode($input, true);
 
-      if (json_last_error() !== JSON_ERROR_NONE) {
+      if (json_last_error() !== JSON_ERROR_NONE && !Opherator::$suppressRequestExceptions) {
         throw new InvalidBodyFormatException();
       }
 
