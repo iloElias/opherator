@@ -108,7 +108,7 @@ class Response
   public static function answer(int $answerType = self::PRINT_RESPONSE): string
   {
     if (self::$response instanceof JsonResponse) {
-      self::setHeader(self::$response->status->code);
+      http_response_code(self::$response->status->code);
     }
     switch ($answerType) {
       case self::PRINT_RESPONSE:
