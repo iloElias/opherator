@@ -8,7 +8,7 @@ use Ilias\Opherator\Request\StatusCode;
 class JsonResponse extends \stdClass
 {
   public function __construct(
-    public StatusCode $statusCode,
+    public StatusCode $status,
     array $initialValue = []
   ) {
     if (!empty($initialValue)) {

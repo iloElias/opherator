@@ -21,7 +21,7 @@ class JsonResponseTest extends TestCase
   {
     $statusCode = $this->createMock(StatusCode::class);
     $jsonResponse = new JsonResponse($statusCode, ['key1' => 'value1', 'key2' => 'value2']);
-    $expectedJson = json_encode(['statusCode' => new stdClass(), 'key1' => 'value1', 'key2' => 'value2']);
+    $expectedJson = json_encode(['status' => new stdClass(), 'key1' => 'value1', 'key2' => 'value2']);
     $this->assertEquals($expectedJson, (string) $jsonResponse);
   }
 

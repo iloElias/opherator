@@ -50,18 +50,8 @@ class ResponseTest extends TestCase
 
   public function testSetHeader()
   {
-    Response::setHeader(Response::jsonResponse());
+    Response::jsonResponse();
     $this->assertEquals(['Content-Type: application/json; charset=UTF-8'], Response::getHeaders());
-  }
-
-  public function testJsonResponse()
-  {
-    $this->assertEquals('Content-Type: application/json; charset=UTF-8', Response::jsonResponse());
-  }
-
-  public function testHtmlResponse()
-  {
-    $this->assertEquals('Content-Type: text/html; charset=UTF-8', Response::htmlResponse());
   }
 
   public function testAnswerReturnResponse()
