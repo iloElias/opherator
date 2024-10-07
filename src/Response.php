@@ -17,9 +17,7 @@ class Response
 
   /**
    * Sets the response data.
-   *
-   * @param array $response The response data.
-   *
+   * @param array|JsonResponse $response The response data.
    * @throws InvalidResponseException if the response data is empty.
    * @return void
    */
@@ -34,11 +32,10 @@ class Response
 
   /**
    * Appends data to the response.
-   *
+   * @deprecated This method is not recommended for use. Instead use `setResponse()` with `JsonResponse` for better and clear responses.
    * @param string $key The key to append data to.
    * @param string|array $response The response data.
    * @param bool $override Whether to override existing data.
-   *
    * @throws InvalidResponseException if the response data is empty.
    * @return void
    */

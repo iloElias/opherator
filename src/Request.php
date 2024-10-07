@@ -19,7 +19,6 @@ class Request
 
   /**
    * Sets up the request data from the server and input.
-   *
    * @throws InvalidMethodException if the HTTP method is invalid.
    * @throws InvalidBodyFormatException if the request body format is invalid.
    * @return void
@@ -35,7 +34,6 @@ class Request
 
   /**
    * Gets the HTTP method of the request.
-   *
    * @return string The HTTP method.
    */
   public static function getMethod(): string
@@ -45,7 +43,6 @@ class Request
 
   /**
    * Gets the body of the request.
-   *
    * @return array The request body.
    */
   public static function getBody(): array
@@ -55,7 +52,6 @@ class Request
 
   /**
    * Gets the query parameters of the request.
-   *
    * @return array The query parameters.
    */
   public static function getQuery(): array
@@ -65,7 +61,6 @@ class Request
 
   /**
    * Gets a specific header from the request.
-   *
    * @param string $name The name of the header.
    * @return string|null The header value or null if not found.
    */
@@ -76,7 +71,6 @@ class Request
 
   /**
    * Checks if the request has a body.
-   *
    * @return bool True if the request has a body, false otherwise.
    */
   public static function hasBody(): bool
@@ -86,7 +80,6 @@ class Request
 
   /**
    * Handles the request headers.
-   *
    * @return void
    */
   public static function handleHeaders(): void
@@ -103,7 +96,6 @@ class Request
 
   /**
    * Gets the request headers.
-   *
    * @return array The request headers.
    */
   public static function getHeaders(): array
@@ -113,9 +105,7 @@ class Request
 
   /**
    * Handles the request body by decoding JSON input.
-   *
    * @param string $input The raw input data.
-   *
    * @throws InvalidBodyFormatException if the request body format is invalid.
    * @return void
    */
