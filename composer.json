@@ -1,7 +1,7 @@
 {
   "name": "ilias/opherator",
   "type": "library",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Package to handle requests",
   "keywords": [
     "request",
