@@ -27,7 +27,7 @@ class Request
   {
     $method = new Method($_SERVER["REQUEST_METHOD"]);
     self::$method = $method->getMethod();
-    self::$query = $_GET ?? [];
+    self::handleQuery();
     self::handleBody(file_get_contents("php://input"));
     self::handleHeaders();
   }
@@ -76,6 +76,19 @@ class Request
   public static function hasBody(): bool
   {
     return self::$hasBody;
+  }
+
+  private static function handleQuery(): void
+  {
+    self::$query = $_GET ?? [];
+    $requestUri = $_SERVER["REQUEST_URI"];
+    if (!empty($requestUri) && str_contains($requestUri, "?")) {
+      $rawQuery = explode("?", $requestUri)[1];
+      foreach (explode('&', $rawQuery) as $content) {
+        [$key, $value] = explode("=", $content);
+        self::$query[$key] = $value;
+      }
+    }
   }
 
   /**

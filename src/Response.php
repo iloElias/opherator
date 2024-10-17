@@ -1,4 +1,5 @@
 <?php
+
 namespace Ilias\Opherator;
 
 use Ilias\Opherator\Exceptions\InvalidResponseException;
