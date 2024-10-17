@@ -124,15 +124,20 @@ class Request
    */
   private static function handleBody(string $input): void
   {
-    if ($input) {
+    if (!empty($input)) {
       self::$hasBody = true;
       $body = json_decode($input, true);
 
-      if (json_last_error() !== JSON_ERROR_NONE && !Opherator::$suppressRequestExceptions) {
-        throw new InvalidBodyFormatException();
+      if (json_last_error() !== JSON_ERROR_NONE) {
+        if (!Opherator::$suppressRequestExceptions) {
+          throw new InvalidBodyFormatException();
+        }
+        self::$body = [];
+      } else {
+        self::$body = $body;
       }
-
-      self::$body = $body ?? [];
+    } else {
+      self::$body = [];
     }
   }
 
